@@ -84,6 +84,25 @@ def report_parser_from_text(text, ignore_log_info=True):
 
 def report_parser(path_or_file, ignore_log_info=True):
 	"""
+	port_regex_specific = re.compile("([\w\d\s]*)\(([\d]+)/([\w\W\d]+)\)")
+	port_regex_generic = re.compile("([\w\d\s]*)/([\w\W\d]+)")
+	cvss_regex = re.compile("(cvss_base_vector=[\s]*)([\w:/]+)")
+	vulnerability_IDs = ("cve", "bid", "bugtraq")
+
+	m_return = []
+
+
+	for child in path_or_file:
+		print(child.attrib)
+
+		if child.find("cve") == "NOCVE":
+			logging.warning("%s is not a valid vulnerability ID, skipping vulnerability..." % child.attrib)
+			logging.debug(e)
+		"""
+		# Regex
+	return path_or_file
+
+	"""
     This functions transform XML OpenVas file report to OpenVASResult object structure.
 
     To pass StringIO file as parameter, you must do that:
@@ -111,6 +130,7 @@ def report_parser(path_or_file, ignore_log_info=True):
     :return: list of OpenVASResult structures.
     :rtype: list(OpenVASResult)
     """
+	"""
 	if isinstance(path_or_file, str):
 		if not os.path.exists(path_or_file):
 			raise IOError("File %s not exits." % path_or_file)
@@ -122,7 +142,7 @@ def report_parser(path_or_file, ignore_log_info=True):
 
 	# Parse XML file
 	try:
-		xml_parsed = etree.parse(path_or_file)
+		xml_parsed = path_or_file
 	except etree.ParseError:
 		raise etree.ParseError("Invalid XML file. Ensure file is correct and all tags are properly closed.")
 
@@ -134,10 +154,13 @@ def report_parser(path_or_file, ignore_log_info=True):
 		xml = xml_parsed.getroot()
 	else:
 		raise TypeError("Expected ElementTree or Element, got '%s' instead" % type(xml_parsed))
+	xml = xml.getchildren()
+	#print(', '.join(xml))
+	#print (', '.join(xml.keys()))
 
 	# Check valid xml format
-	if "id" not in xml.keys():
-		raise ValueError("XML format is not valid, doesn't contains id attribute.")
+	#if "id" not in xml.keys():
+	#	raise ValueError("XML format is not valid, doesn't contains id attribute.")
 
 	# Regex
 	port_regex_specific = re.compile("([\w\d\s]*)\(([\d]+)/([\w\W\d]+)\)")
@@ -145,7 +168,7 @@ def report_parser(path_or_file, ignore_log_info=True):
 	cvss_regex = re.compile("(cvss_base_vector=[\s]*)([\w:/]+)")
 	vulnerability_IDs = ("cve", "bid", "bugtraq")
 
-	m_return = []
+
 	m_return_append = m_return.append
 
 	# All the results
@@ -363,7 +386,7 @@ def report_parser(path_or_file, ignore_log_info=True):
 		m_return_append(l_partial_result)
 
 	return m_return
-
+	"""
 
 # ------------------------------------------------------------------------------
 #
